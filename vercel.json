@@ -4,7 +4,7 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "env": {
-    "ANTHROPIC_API_KEY": "@anthropic_api_key",
+    "OPENROUTER_API_KEY": "@openrouter_api_key",
     "WALRUS_DELEGATE_KEY": "@walrus_delegate_key",
     "WALRUS_ACCOUNT_ID": "@walrus_account_id",
     "WALRUS_RELAYER_URL": "@walrus_relayer_url",
