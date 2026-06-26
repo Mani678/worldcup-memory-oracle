@@ -81,14 +81,20 @@ export async function POST(req: NextRequest) {
     } catch (e1) {
       console.log('Direct parse failed, trying to extract JSON...')
       
-      // Try to extract JSON from text
-      const jsonMatch = rawText.match(/\{[\s\S]*?\n\}/)
-      if (jsonMatch) {
+      // Try to extract JSON from text — use first '{' to LAST '}' so nested
+      // objects (e.g. "prediction": {...}) don't cause early truncation.
+      // The old regex was lazy and stopped at the first inner closing brace.
+      const firstBrace = rawText.indexOf('{')
+      const lastBrace = rawText.lastIndexOf('}')
+
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        const candidate = rawText.slice(firstBrace, lastBrace + 1)
         try {
-          agentResponse = JSON.parse(jsonMatch[0])
+          agentResponse = JSON.parse(candidate)
           console.log('✓ Extracted JSON parse succeeded')
         } catch (e2) {
           console.error('Extracted JSON parse failed:', e2)
+          console.error('Candidate string was:', candidate)
           throw new Error('Could not parse extracted JSON')
         }
       } else {
