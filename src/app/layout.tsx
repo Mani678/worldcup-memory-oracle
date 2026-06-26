@@ -1,5 +1,4 @@
 'use client'
-
 import { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit'
@@ -13,7 +12,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body>
         <QueryClientProvider client={queryClient}>
-          <SuiClientProvider networks={{ mainnet: { url: 'https://fullnode.mainnet.sui.io:443' } }} defaultNetwork="mainnet">
+          <SuiClientProvider
+            networks={{
+              mainnet: { url: 'https://fullnode.mainnet.sui.io:443', network: 'mainnet' }
+            }}
+            defaultNetwork="mainnet"
+          >
             <WalletProvider autoConnect>
               {children}
             </WalletProvider>
